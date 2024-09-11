@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" />
+    <title>Registration Page</title>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 id="title" class="text-center">Registration Form</h1>
+        </header>
+        <form id="registration-form" onsubmit="return formValidation(event)">
+            <div class="form-group">
+                <label id="name-label" for="name">Name</label>
+                <input type="text" id="name" class="form-control" placeholder="Enter your Name" required="">
+            </div>
+            <div class="form-group">
+                <label id="age-label" for="age">Age</label>
+                <input type="number" id="age" min="18" max="60" class="form-control" placeholder="Enter your Age" required="">
+            </div>
+            <div class="form-group">
+                <label id="email-label" for="email">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your Email" required="">
+            </div>
+            <div class="form-group">
+                <label id="password-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" required="">
+            </div>
+            <div class="form-group">
+                <label id="confirmpassword-label" for="confirmpassword">Confirm Password</label>
+                <input type="password" id="confirmpassword" class="form-control" placeholder="Re-enter your password" required="">
+            </div>
+            <div class="form-group">
+                <button type="submit" id="submit" class="submit-button">
+                  Register
+                </button>
+            </div>
+            <div id="message" class="form-group hidden"></div>
+        </form>
+
+        <!-- Success Message Screen -->
+        <div id="success-screen" class="hidden">
+            <h2 class="success">Registration successful. Thank you!</h2>
+        </div>
+    </div>
+
+    <script>
+        function formValidation(event) {
+            event.preventDefault(); // Prevent form from submitting
+            
+            // Get form values
+            var name = document.getElementById("name").value.trim();
+            var age = document.getElementById("age").value;
+            var email = document.getElementById("email").value.trim();
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmpassword").value;
+
+            var message = document.getElementById("message");
+            message.classList.remove('success', 'error');
+            message.classList.add('hidden');
+            
+            // Validation patterns
+            var namePattern = /^[a-zA-Z ]{2,}$/;
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            // Validation
+            if (!namePattern.test(name)) {
+                showMessage('Please enter a valid name (letters only).', 'error');
+                return false;
+            }
+            
+            if (age < 18 || age > 60) {
+                showMessage('Please enter a valid age (18-60).', 'error');
+                return false;
+            }
+
+            if (!emailPattern.test(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return false;
+            }
+
+            if (!passwordPattern.test(password)) {
+                showMessage('Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.', 'error');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match.', 'error');
+                return false;
+            }
+
+            // Success - hide form and show success screen
+            document.getElementById("title").classList.add('hidden');// Hide the title
+            document.getElementById("registration-form").classList.add('hidden'); // Hide the form
+            document.getElementById("success-screen").classList.remove('hidden'); // Show success message
+            return true;
+        }
+
+        function showMessage(msg, type) {
+            var message = document.getElementById("message");
+            message.textContent = msg;
+            message.classList.remove('hidden');
+            message.classList.add(type);
+        }
+    </script>
+</body>
+</html>
